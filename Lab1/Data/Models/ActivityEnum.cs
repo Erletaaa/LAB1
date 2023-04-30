@@ -1,6 +1,8 @@
-﻿namespace Lab1.Data.Models
+﻿namespace GarageMarketProject.Data.Models
 {
-    public class ActivityEnum
+    public enum ActivityEnum
     {
+        ACTIVE,
+        DISABLED
     }
 }
