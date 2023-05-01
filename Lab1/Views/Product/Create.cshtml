@@ -1,0 +1,15 @@
+@Model ProductModel
+<form enctype="multipart/form-data" asp-action="Create" asp-controller="Product" method="post">
+    <input type="text" placeholder="Title" name="Title"/>
+    <input type="text" placeholder="Description" name="Description"/>
+    <input type="text" placeholder="Phone number" name ="UserPhoneNumber">
+    <input type="text" placeholder="Address" name="UserAddress"/>
+    <select name="CategoryId">
+        @foreach (var item in ViewBag.CategoryOptions)
+        {
+            <option value="@item.Id">@item.Name</option>
+        }
+    </select>
+    <input type="file" name="Picture"/>
+    <button type="submit">Posto</button>
+</form>
