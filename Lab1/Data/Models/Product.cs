@@ -1,4 +1,4 @@
-﻿namespace GarageMarketProject.Data.Models
+﻿namespace Lab1.Data.Models
 {
     public class Product : Base
     {
