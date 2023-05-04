@@ -1,6 +1,4 @@
 ﻿using Lab1.Data.Models;
-using Lab1.Data.Models;
-using Lab1.Data;
 using Microsoft.Data.SqlClient;
 using System.Security.Cryptography;
 using System.Text;
