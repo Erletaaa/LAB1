@@ -1,6 +1,6 @@
-using GarageMarketProject.Data.Models;
+using Lab1.Data.Models;
 
-namespace GarageMarketProject.Data.Helpers
+namespace Lab1.Data.Helpers
 {
     public class ActivityHelper
     {
