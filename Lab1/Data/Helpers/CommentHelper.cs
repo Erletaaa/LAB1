@@ -1,6 +1,7 @@
-using GarageMarketProject.Data.Models;
+using Lab1.Data.Models;
+using Microsoft.EntityFrameworkCore;
 
-namespace GarageMarketProject.Data.Helpers
+namespace Lab1.Data.Helpers
 {
     public class CommentHelper
     {
@@ -12,33 +13,37 @@ namespace GarageMarketProject.Data.Helpers
 
         public Comment GetById(int id)
         {
-            var comment = _context.Comments.Where(x => x.Id == id).FirstOrDefault();
+            var comment = _context.Comments.Where(x => x.Id == id).Include(x=>x.User).FirstOrDefault();
             return comment;
         }
 
         public List<Comment> GetCommentsForProduct(int productId)
         {
-            var comments = _context.Comments.Where(x => x.ProductId == productId).OrderByDescending(x => x.UpdatedOn).ToList();
+            var comments = _context.Comments.Where(x => x.ProductId == productId).Include(x=>x.User).OrderByDescending(x => x.UpdatedOn).ToList();
             return comments;
         }
 
-        public void AddComment(Comment comment)
+        public Comment AddComment(Comment comment)
         {
-            _context.Comments.Add(comment);
+            var insertedComment = _context.Comments.Add(comment);
             _context.SaveChanges();
+
+            return GetById(insertedComment.Entity.Id);
         }
 
-        public void UpdateComment(int id, string commentText)
+        public Comment UpdateComment(int id, string commentText)
         {
             var comment = _context.Comments.Where(x => x.Id == id).FirstOrDefault();
             if (comment == null)
-                return;
+                return null;
 
             comment.CommentText = commentText;
             comment.UpdatedOn = DateTime.Now;
 
-            _context.Comments.Update(comment);
+            var updatedComment = _context.Comments.Update(comment);
             _context.SaveChanges();
+
+            return updatedComment.Entity;
         }
 
         public void DeleteComment(int id)
