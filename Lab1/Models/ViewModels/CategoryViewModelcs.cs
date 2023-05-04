@@ -1,4 +1,4 @@
-namespace Lab1.Models.ViewModels
+﻿namespace Lab1.Models.ViewModels
 {
     public class CategoryViewModel
     {

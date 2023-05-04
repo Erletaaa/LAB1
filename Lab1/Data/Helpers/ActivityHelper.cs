@@ -32,15 +32,17 @@ namespace Lab1.Data.Helpers
             _context.SaveChanges();
         }
 
-        public void AddFavorite(int productId, int userId)
+        public Favorite AddFavorite(int productId, int userId)
         {
-            _context.Favorites.Add(new Favorite
+            var favorite = _context.Favorites.Add(new Favorite
             {
                 ProductId = productId,
                 UserId = userId,
                 UpdatedOn = DateTime.Now
             });
             _context.SaveChanges();
+
+            return favorite.Entity;
         }
 
         public void RemoveFavorite(int productId, int userId)
@@ -52,6 +54,11 @@ namespace Lab1.Data.Helpers
 
             _context.Favorites.Remove(favoriteInstance);
             _context.SaveChanges();
+        }
+
+        internal object FavoritesCount(int id)
+        {
+            throw new NotImplementedException();
         }
     }
 }

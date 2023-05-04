@@ -43,5 +43,10 @@ namespace Lab1.Data.Helpers
 
             _context.Categories.Remove(category);
         }
+
+        internal dynamic GetAll()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -1,3 +1,5 @@
+using Lab1.Data.Models;
+
 namespace Lab1.Data.Models
 {
     public class Follow : Base
