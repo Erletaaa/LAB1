@@ -10,15 +10,17 @@ namespace Lab1.Data.Helpers
             _context = context;
         }
 
-        public void AddFollow(int fromUserId, int toUserId)
+        public Follow AddFollow(int fromUserId, int toUserId)
         {
-            _context.Follows.Add(new Follow
+            var follow = _context.Follows.Add(new Follow
             {
                 FromUserId = fromUserId,
                 ToUserId = toUserId,
                 UpdatedOn = DateTime.Now
             });
             _context.SaveChanges();
+
+            return follow.Entity;
         }
 
         public void RemoveFollow(int fromUserId, int toUserId)
@@ -32,15 +34,23 @@ namespace Lab1.Data.Helpers
             _context.SaveChanges();
         }
 
-        public void AddFavorite(int productId, int userId)
+        public int CountFollowsForUser(int userId)
         {
-            _context.Favorites.Add(new Favorite
+            var followCount = _context.Follows.Where(x=>x.ToUserId==userId).Count();
+            return followCount;
+        }
+
+        public Favorite AddFavorite(int productId, int userId)
+        {
+            var favorite = _context.Favorites.Add(new Favorite
             {
                 ProductId = productId,
                 UserId = userId,
                 UpdatedOn = DateTime.Now
             });
             _context.SaveChanges();
+
+            return favorite.Entity;
         }
 
         public void RemoveFavorite(int productId, int userId)
@@ -52,6 +62,12 @@ namespace Lab1.Data.Helpers
 
             _context.Favorites.Remove(favoriteInstance);
             _context.SaveChanges();
+        }
+
+        public int FavoritesCount(int productId)
+        {
+            var favoritesCount = _context.Favorites.Where(x => x.ProductId == productId).Count();
+            return favoritesCount;
         }
     }
 }
