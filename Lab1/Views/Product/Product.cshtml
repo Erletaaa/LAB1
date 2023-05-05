@@ -1,0 +1,156 @@
+@using Lab1.Models.ViewModels;
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@model ProductViewModel;
+
+@{
+    var user = @HttpContextAccessor.HttpContext.Session.GetString("User");
+    var userIsLoggedIn = false;
+
+    if (user != null)
+    {
+        userIsLoggedIn = true;
+    }
+}
+
+<div class="row h-400 border rounded">
+    <div class="col-sm p-20">
+        <img class="col-sm product-img" src="@Model.Picture" alt="" />
+    </div>
+    <div class="col-sm p-20">
+        <div class="row m-2 p-2 rounded">
+            <div class="font-25">@Model.Title</div>
+            <div class="">@Model.Description</div>
+        </div>
+        <div class="row m-2 p-2 shadow-sm rounded">
+            <div class="col-sm border-right">@Model.UserAddress</div>
+            <div class="col-sm">@Model.UserPhoneNumber</div>
+        </div>
+        <div class="row m-2 p-2 rounded serenity">
+            <div class="col-sm font-25 border-right">@Model.Price €</div>
+            <div class="col-sm font-25">
+                @Model.Favorites
+
+                @if (userIsLoggedIn)
+                {
+                    <button class="btn border-0" onclick="FavoriteProduct(@Model.Id)">
+                        <svg class="pb-1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height="25px" width="25px" version="1.1" id="Layer_1" viewBox="0 0 512 512" xml:space="preserve">
+                        <path style="fill:#0F52BA;" d="M467.204,67.921C412.786,20.394,329.86,25.984,282.31,80.365l-26.311,29.66l-26.311-29.66  C182.138,25.984,99.212,20.396,44.795,67.921c-54.437,47.543-60.045,130.51-12.503,184.946l185.641,206.535  c9.692,10.783,23.568,16.968,38.067,16.968c14.499,0,28.375-6.185,38.067-16.968L479.546,253.05l0.161-0.182  C527.251,198.431,521.641,115.464,467.204,67.921z" />
+                        <path style="fill:#1434A4;" d="M467.204,67.921C412.786,20.394,329.86,25.984,282.31,80.365l-26.311,29.66v366.346  c14.5,0,28.375-6.185,38.067-16.968L479.545,253.05l0.161-0.182C527.251,198.431,521.641,115.464,467.204,67.921z" />
+                            </svg>
+                    </button>
+                }
+                else
+                {
+                    <svg class="pb-1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height="25px" width="25px" version="1.1" id="Layer_1" viewBox="0 0 512 512" xml:space="preserve">
+                    <path style="fill:#0F52BA;" d="M467.204,67.921C412.786,20.394,329.86,25.984,282.31,80.365l-26.311,29.66l-26.311-29.66  C182.138,25.984,99.212,20.396,44.795,67.921c-54.437,47.543-60.045,130.51-12.503,184.946l185.641,206.535  c9.692,10.783,23.568,16.968,38.067,16.968c14.499,0,28.375-6.185,38.067-16.968L479.546,253.05l0.161-0.182  C527.251,198.431,521.641,115.464,467.204,67.921z" />
+                    <path style="fill:#1434A4;" d="M467.204,67.921C412.786,20.394,329.86,25.984,282.31,80.365l-26.311,29.66v366.346  c14.5,0,28.375-6.185,38.067-16.968L479.545,253.05l0.161-0.182C527.251,198.431,521.641,115.464,467.204,67.921z" />
+                        </svg>
+                }
+
+            </div>
+        </div>
+        <div class="row mt-2 p-2 float-right">
+            <div class="col-sm">
+                <img src="@Model.User.ProfilePicture" class="profile-img rounded-circle mr-2">
+                <span class="mr-2">@Model.User.Username</span>
+                @if (userIsLoggedIn)
+                {
+                    <button type="submit" class="p-2 border-0 rounded serenity mr-2" onclick="FollowUser(@Model.User.Id)">Follow</button>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row mt-2">
+    <div id="comment-section" class="col-sm border rounded mr-2">
+        @if (userIsLoggedIn)
+        {
+            <form id="comment-form">
+                <div class="row p-2">
+                    <input id="comment-input" class="col-9 shadow-sm form-control" type="text" placeholder="Write your thoughts..." />
+                    <button type="submit" class="ml-2 col-2 pr-2 pl-2 border-0 rounded serenity mr-2">Post</button>
+                </div>
+            </form>
+        }
+        else
+        {
+            <div class="row p-2">
+                <span>Comments</span>
+            </div>
+        }
+
+        @foreach (var comment in Model.Comments)
+        {
+            <div class="p-2">
+                <span class="font-15">@comment.Username</span>
+                <span class="font-10">@comment.UpdatedOn</span>
+                <div class="row font-10">@comment.CommentText</div>
+            </div>
+        }
+    </div>
+    <div id="ads-section" class="col border rounded p-2">
+        <span class="border-bottom">Te fundit</span>
+        <div class="row mt-2">
+            <div class="col red">
+                <img class="product-card-img" src="https://gv466hf5ah.gjirafa.net/image/0973/0973756.jpg" alt="" />
+                <span clas="row">Title</span>
+                <span class="row">120,99 €</span>
+            </div>
+            <div class="col green">
+                test
+            </div>
+            <div class="col red">
+                test
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('#comment-form').on('submit', function () {
+        var commentText = $('#comment-input').val();
+        console.log(commentText);
+        console.log(@Model.Id)
+
+        $.ajax('../comment/add', {
+            type: 'POST',
+            data: { CommentText: commentText, ProductId: @Model.Id },
+            success: function (data) {
+                console.log(data);
+                var insertedComment = '<div><p>' + data.username + ' - ' + data.updatedOn + '</p><p>' + data.commentText + '</p></div>';
+                $('#comment-section').append(insertedComment);
+            },
+            error: function () {
+                alert('Something went wrong!');
+            }
+        });
+
+        return false;
+    });
+
+    function FollowUser(userId) {
+        $.ajax({
+            url: '/Activity/Follow/' + userId,
+            type: "POST",
+            success: function (data) {
+                console.log("Success!");
+            },
+            error: function (error) {
+                console.log(`Error ${error}`);
+            }
+        });
+    }
+
+    function FavoriteProduct(productId) {
+        $.ajax({
+            url: '/Activity/Favorite/' + productId,
+            type: "POST",
+            success: function (data) {
+                console.log("Success!");
+            },
+            error: function (error) {
+                console.log(`Error ${error}`);
+            }
+        });
+    }
+</script>
