@@ -1,4 +1,4 @@
-﻿using Lab1.Data;
+using Lab1.Data;
 using Lab1.Data.Helpers;
 using Lab1.Data.Models;
 using Lab1.Data.Helpers;

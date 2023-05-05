@@ -10,15 +10,17 @@ namespace Lab1.Data.Helpers
             _context = context;
         }
 
-        public void AddFollow(int fromUserId, int toUserId)
+        public Follow AddFollow(int fromUserId, int toUserId)
         {
-            _context.Follows.Add(new Follow
+            var follow = _context.Follows.Add(new Follow
             {
                 FromUserId = fromUserId,
                 ToUserId = toUserId,
                 UpdatedOn = DateTime.Now
             });
             _context.SaveChanges();
+
+            return follow.Entity;
         }
 
         public void RemoveFollow(int fromUserId, int toUserId)
@@ -30,6 +32,12 @@ namespace Lab1.Data.Helpers
 
             _context.Follows.Remove(followInstance);
             _context.SaveChanges();
+        }
+
+        public int CountFollowsForUser(int userId)
+        {
+            var followCount = _context.Follows.Where(x=>x.ToUserId==userId).Count();
+            return followCount;
         }
 
         public Favorite AddFavorite(int productId, int userId)
@@ -56,9 +64,10 @@ namespace Lab1.Data.Helpers
             _context.SaveChanges();
         }
 
-        internal object FavoritesCount(int id)
+        public int FavoritesCount(int productId)
         {
-            throw new NotImplementedException();
+            var favoritesCount = _context.Favorites.Where(x => x.ProductId == productId).Count();
+            return favoritesCount;
         }
     }
 }
