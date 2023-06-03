@@ -1,0 +1,37 @@
+@using Lab1.Models.Admin;
+@model AdminUserModel;
+@{
+    Layout = "../Shared/_AdminLayout.cshtml";
+
+    var currentUserRoles = Model.Roles.Select(x => x.Role.Id);
+}
+
+<div class="w-75 d-flex justify-content-center align-content-center p-3 full-height bg-light">
+    <form class="w-50" action="/Admin/Edit/User" method="POST">
+        <div class="m-2">
+            <input class="form-control" type="text" name="Id" value="@Model.Id" hidden readonly/>
+        </div>
+        <div class="m-2">
+            <label>Username</label>
+            <input class="form-control" type="text" name="Username" value="@Model.Username" />
+        </div>
+        <div class="m-2">
+            <label>Email</label>
+            <input class="form-control" type="text" name="Email" value="@Model.Email" readonly/>
+        </div>
+        <div class="m-2">
+            <label>Password</label>
+            <input class="form-control" type="password" name="Password" value="@Model.HashedPassword" />
+        </div>
+        <div class="m-2">
+            <label>Roles</label>
+            @foreach (var role in Model.AvailableRoles)
+            {
+                <input type="checkbox" value="@role.Id" name="RoleIds" />
+
+                <span>@role.Name</span>
+            }
+        </div>
+        <button class="m-2 btn btn-primary" type="submit">Save changes</button>
+    </form>
+</div>
