@@ -1,0 +1,53 @@
+@using Lab1.Models.Admin;
+@using Lab1.Data.Models;
+@model PagedResponse<List<AdminProductModel>>
+@{
+    Layout = "../Shared/_AdminLayout.cshtml";
+}
+
+<div class="w-75 d-flex flex-column p-3 full-height bg-light">
+    <h3 class="mt-2">Manage products</h3>
+<div class="d-flex p-2 mt-2 border-bottom">
+    <div class="col">Id</div>
+    <div class="col">Title</div>
+    <div class="col">Category</div>
+    <div class="col">User</div>
+    <div class="col">Updated on</div>
+    <div class="col">Activity</div>
+    <div class="col">Edit</div>
+</div>
+
+@foreach (var product in Model.Item)
+{
+    <div class="d-flex p-2 m-2 border-bottom">
+        <div class="col">@product.Id</div>
+        <div class="col">@product.Title</div>
+        <div class="col">@product.Category</div>
+        <div class="col">@product.User</div>
+        <div class="col">@product.UpdatedOn</div>
+        <div class="col">
+            @if (product.Activity == ActivityEnum.ACTIVE)
+            {
+                <span class="text-success">Active</span>
+            }
+            else
+            {
+                <span class="text-danger">Disabled</span>
+            }
+        </div>
+        <div class="col"><a href="/Admin/Edit/Product?id=@product.Id" class="bg-primary p-2 white-clickable-element rounded">Edit</a></div>
+    </div>
+}
+
+<div class="col align-self-end w-25">
+    @if (Model.Page > 1)
+    {
+        <a href="/Admin/Users?page=@(Model.Page-1)">Prev.</a>
+    }
+    <span>Page @Model.Page</span>
+    @if (Model.Page != Model.TotalPages)
+    {
+        <a href="/Admin/Users?page=@(Model.Page+1)">Next.</a>
+    }
+</div>
+</div>

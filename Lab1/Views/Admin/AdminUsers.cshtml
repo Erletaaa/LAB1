@@ -1,0 +1,40 @@
+@using Lab1.Data.Models;
+@model PagedResponse<List<User>>
+@{
+    Layout = "../Shared/_AdminLayout.cshtml";
+}
+
+<div class="w-75 d-flex flex-column p-3 full-height bg-light">
+    <h3 class="mt-2">Manage users</h3>
+    <div class="d-flex p-2 mt-2 border-bottom">
+        <div class="col">Id</div>
+        <div class="col">Username</div>
+        <div class="col">Email</div>
+        <div class="col">Roles</div>
+        <div class="col">Updated on</div>
+        <div class="col">Edit</div>
+    </div>
+    @foreach (var user in Model.Item)
+    {
+        <div class="d-flex p-2 m-2 border-bottom">
+            <div class="col">@user.Id</div>
+            <div class="col">@user.Username</div>
+            <div class="col">@user.Email</div>
+            <div class="col"><span class="badge">Admin</span><span class="badge">Customer</span></div>
+            <div class="col">@user.UpdatedOn</div>
+            <div class="col"><a href="/Admin/Edit/User?id=@user.Id" class="bg-primary p-2 white-clickable-element rounded">Edit</a></div>
+        </div>
+    }
+
+    <div class="col align-self-end w-25">
+        @if (Model.Page > 1)
+        {
+            <a href="/Admin/Users?page=@(Model.Page-1)">Prev.</a>
+        }
+        <span>Page @Model.Page</span>
+        @if (Model.Page != Model.TotalPages)
+        {
+            <a href="/Admin/Users?page=@(Model.Page+1)">Next.</a>
+        }
+    </div>
+</div>
