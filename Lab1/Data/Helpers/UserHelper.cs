@@ -1,6 +1,12 @@
 ﻿using Lab1.Data.Models;
+using Lab1.Models;
+using Lab1.Data.Models;
+using Lab1.Data;
+using Lab1.Models;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
+using System.Security.Cryptography.Xml;
 using System.Text;
 
 namespace Lab1.Data.Helpers
@@ -8,6 +14,8 @@ namespace Lab1.Data.Helpers
     public class UserHelper
     {
         private ApplicationDbContext _context;
+        private int PageSize = 12;
+
         public UserHelper(ApplicationDbContext context)
         {
             _context = context;
@@ -15,14 +23,37 @@ namespace Lab1.Data.Helpers
 
         public User GetById(int id)
         {
-            var user = _context.Users.Where(x => x.Id == id).FirstOrDefault();
+            var user = _context.Users
+                               .Include(x => x.Roles)
+                                .ThenInclude(x => x.Role)
+                               .Where(x => x.Id == id)
+                               .AsNoTracking()
+                               .FirstOrDefault();
+
             return user;
         }
 
         public User GetByEmail(string email)
         {
-            var user = _context.Users.Where(x => x.Email == email).FirstOrDefault();
+            var user = _context.Users
+                                .Where(x => x.Email == email)
+                                .AsNoTracking()
+                                .FirstOrDefault();
             return user;
+        }
+
+        public PagedResponse<List<User>> GetPagedUsers(int page)
+        {
+            var usersCount = _context.Users.OrderBy(x => x.Id).Count();
+            var users = _context.Users.Skip((page - 1) * PageSize).Take(PageSize).ToList();
+
+            return new PagedResponse<List<User>>(users, page, usersCount);
+        }
+
+        public List<Role> GetRoles()
+        {
+            var roles = _context.Roles.AsNoTracking().ToList();
+            return roles;
         }
 
         public void AddUser(User user)
@@ -46,8 +77,26 @@ namespace Lab1.Data.Helpers
             if (user == null)
                 return;
 
-            user = updateUserModel;
-            _context.Users.Update(user);
+            user.Username = updateUserModel.Username;
+            user.Email = updateUserModel.Email;
+            user.HashedPassword = updateUserModel.HashedPassword;
+            user.ProfilePicureUrl = updateUserModel.ProfilePicureUrl;
+            user.ProfileDescription = updateUserModel.ProfileDescription;
+            user.UpdatedOn = updateUserModel.UpdatedOn;
+
+            _context.SaveChanges();
+        }
+
+        public void UpdateRoles(int userId, List<int> roleIds)
+        {
+            var roles = _context.UserRoles.Where(x => x.UserId == userId).ToList();
+
+            _context.UserRoles.RemoveRange(roles);
+            _context.UserRoles.AddRange(roleIds.Select(x => new UserRole
+            {
+                UserId = userId,
+                RoleId = x
+            }));
             _context.SaveChanges();
         }
 
