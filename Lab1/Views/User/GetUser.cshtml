@@ -1,0 +1,44 @@
+@using Lab1.Models.ViewModels;
+@model GuestUserProfileViewModel
+
+<div class="d-flex">
+    <div class="profile-sidebar p-3 d-flex flex-column justify-content-center align-items-center border-right">
+    <img src="@Model.User.ProfilePicureUrl" class="profile-img" />
+    <div class="d-flex mt-5 w-100">
+        <div class="col">
+            <span class="username-font">@Model.User.Username</span>
+            <br />
+            <span>@Model.Products.TotalCount products posted</span>
+        </div>
+        <div>
+            <a class="btn btn-primary rounded mt-3 col-ml" href="/Activity/Follow/@Model.User.Id">Follow user</a>
+        </div>
+    </div>
+    <div class="mt-3 stretch-text">
+        @Model.User.ProfileDescription
+    </div>
+    </div>
+    <div class="activity-container d-flex flex-column p-3 justify-content-center">
+        <div class="d-flex flex-wrap">
+            @foreach (var item in Model.Products.Item)
+            {
+                <div class="p-3 d-flex flex-column ad-card-container shadow m-2">
+                    <img src="@item.Picture" class="w-100 ad-card-img" />
+                    <a href="/Product?id=@item.Id" class="w-100 ad-card-font">@item.Title</a>
+                    <span class="w-100 d-flex align-items-end">Price: @item.Price $</span>
+                </div>
+            }
+        </div>
+        <div class="d-flex align-self-end">
+            @if (Model.Products.Page > 1)
+            {
+                <a href="GetUser?id=@Model.User.Id&page=@(Model.Products.Page-1)">Prev.</a>
+            }
+            <span>Page @Model.Products.Page</span>
+            @if (Model.Products.Page != Model.Products.TotalPages)
+            {
+                <a href="GetUser?id=@Model.User.Id&page=@(Model.Products.Page+1)">Next.</a>
+            }
+        </div>
+    </div>
+</div>

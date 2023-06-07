@@ -25,7 +25,9 @@ namespace Lab1.Data.Helpers
             string uploads = Path.Combine(_rootFolder, writeFolder);
             if (file.Length > 0)
             {
-                string filePath = Path.Combine(uploads, file.FileName);
+                var rootFileName = file.FileName.Split(".");
+                var fileNameStamp = $"{rootFileName.First()}-{DateTime.Now.ToString().GetHashCode().ToString()}.{rootFileName.Last()}";
+                string filePath = Path.Combine(uploads, fileNameStamp);
                 using (Stream fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
                 {
                     file.CopyTo(fileStream);
