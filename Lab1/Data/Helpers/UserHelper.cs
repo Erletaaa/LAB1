@@ -1,8 +1,5 @@
 ﻿using Lab1.Data.Models;
 using Lab1.Models;
-using Lab1.Data.Models;
-using Lab1.Data;
-using Lab1.Models;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
@@ -37,6 +34,7 @@ namespace Lab1.Data.Helpers
         {
             var user = _context.Users
                                 .Where(x => x.Email == email)
+                                    .Include(x=>x.Roles)
                                 .AsNoTracking()
                                 .FirstOrDefault();
             return user;
@@ -106,6 +104,21 @@ namespace Lab1.Data.Helpers
             var user = _context.Users.Where(x => x.Id == id).FirstOrDefault();
             if (user == null)
                 return;
+
+            var products = _context.Products.Where(x => x.UserId == id);
+            _context.Products.RemoveRange(products);
+
+            var userRoles = _context.UserRoles.Where(x => x.UserId == id);
+            _context.UserRoles.RemoveRange(userRoles);
+
+            var follows = _context.Follows.Where(x => x.FromUserId == id || x.ToUserId == id);
+            _context.Follows.RemoveRange(follows);
+
+            var comments = _context.Comments.Where(x => x.UserId == id);
+            _context.Comments.RemoveRange(comments);
+
+            var favorites = _context.Favorites.Where(x => x.UserId == id);
+            _context.Favorites.RemoveRange(favorites);
 
             _context.Users.Remove(user);
             _context.SaveChanges();

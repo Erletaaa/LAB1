@@ -1,0 +1,54 @@
+@using Lab1.Models.Admin;
+@model ProductCategoryModel
+
+<div class="w-75 d-flex justify-content-center align-content-center p-3 full-height bg-light">
+    <form class="w-50" action="/Product/EditProduct" method="POST">
+        <div class="m-2">
+            <input class="form-control" type="file" name="Picture"/>
+        </div>
+        <div class="m-2">
+            <input class="form-control" type="text" name="Id" value="@Model.Product.Id" hidden readonly/>
+        </div>
+        <div class="m-2">
+            <label>Title</label>
+            <input class="form-control" type="text" name="Title" value="@Model.Product.Title" />
+        </div>
+        <div class="m-2">
+            <label>Description</label>
+            <textarea class="form-control" name="Description" value="@Model.Product.Description"></textarea>
+        </div>
+        <div class="m-2">
+            <label>Phone number</label>
+            <input class="form-control" type="text" name="UserPhoneNumber" value="@Model.Product.UserPhoneNumber" />
+        </div>
+        <div class="m-2">
+            <label>Address</label>
+            <input class="form-control" type="text" name="UserAddress" value="@Model.Product.UserAddress" />
+        </div>
+        <div class="m-2">
+            <label>Category</label>
+            <select class="form-control" name="CategoryId">
+                @foreach (var category in Model.AvailableCategories)
+                {
+                    if (category.Id == Model.Product.CategoryId)
+                    {
+                        <option value="@category.Id" selected>@category.Name</option>
+
+                        continue;
+                    }
+
+                    <option value="@category.Id">@category.Name</option>
+                }
+            </select>
+        </div>
+        <div class="m-2">
+            <label>Activity status</label>
+            <select class="form-control" name="Status">
+                <option value="1">Active</option>
+                <option value="2">Disable</option>
+            </select>
+        </div>
+        <button class="m-2 btn btn-primary" type="submit">Save changes</button>
+        <a class="bg-danger clickable-element text-white p-2 m-2 rounded" href="/Product/DeleteProduct?id=@Model.Product.Id">Delete product</a>
+    </form>
+</div>
