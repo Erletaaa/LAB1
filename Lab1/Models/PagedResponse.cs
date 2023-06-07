@@ -8,12 +8,13 @@ namespace Lab1.Models
         public int TotalPages { get; set; }
         public int TotalCount { get; set; }
 
-        public PagedResponse(T item, int page, int totalCount)
+        public PagedResponse(T item, int page, int totalCount, int pageSize = 12)
         {
             Item = item;
             Page = page;
             TotalCount = totalCount;
             TotalPages = (int)Math.Ceiling(totalCount / (double)PageSize);
+            PageSize = pageSize;
         }
     }
 }
