@@ -1,0 +1,19 @@
+<html>
+<head>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+</head>
+<body>
+    <div class="d-flex">
+        <div class="w-25">
+            <div class="text-center p-2 mt-2"><img class="w-100" src="~/blink-logo.png"/></div>
+            <ul class="mt-5">
+                <li class="p-2"><a class="clickable-element" href="/Admin/Index">Home</a></li>
+                <li class="p-2"><a class="clickable-element" href="/Admin/Users">Users</a></li>
+                <li class="p-2"><a class="clickable-element" href="/Admin/Products">Products</a></li>
+            </ul>
+        </div>
+        @RenderBody()
+    </div>
+</body>
+</html>
